@@ -3,13 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <title>NEWS</title>
-  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
 <h1>NEWS</h1>
 <div id="posts"></div>
 
-<script type="module" src="js/main.js"></script>
+<script type="module">
+/* ================= FIREBASE ================= */
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs }
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDZLoXJbAJmFNM60dleBL5cXr9ztp6Ctrg",
+  authDomain: "gyuyguy-3efcb.firebaseapp.com",
+  projectId: "gyuyguy-3efcb",
+  storageBucket: "gyuyguy-3efcb.appspot.com",
+  messagingSenderId: "199804943420",
+  appId: "1:199804943420:web:d7de87bf3d2231636a9739"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ================= LOAD POSTS ================= */
+
+const container = document.getElementById("posts");
+
+const snap = await getDocs(collection(db, "posts"));
+snap.forEach(doc => {
+  const p = doc.data();
+  container.innerHTML += `
+    <div style="border:1px solid #ccc; padding:10px; margin:10px 0">
+      <h2>${p.title}</h2>
+      <img src="${p.imageURL}" style="max-width:100%">
+      <p>${p.content}</p>
+    </div>
+  `;
+});
+</script>
+
 </body>
 </html>
